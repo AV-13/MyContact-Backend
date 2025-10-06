@@ -26,9 +26,9 @@ const login = async (req, res) => {
         }
         console.log("Token généré:", token, "user : ", user, "error : ", error);
         res.cookie("jwtToken", token, {
-            httpOnly: false,
-            secure: false,
-            sameSite: 'strict',
+            httpOnly: true,
+            secure: true,
+            sameSite: 'none',
             withCredentials: true,
             maxAge: 24 * 60 * 60 * 1000 // 24h
         });
