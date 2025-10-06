@@ -26,9 +26,10 @@ const login = async (req, res) => {
         }
         console.log("Token généré:", token, "user : ", user, "error : ", error);
         res.cookie("jwtToken", token, {
-            httpOnly: true,
+            httpOnly: false,
             secure: false,
             sameSite: 'strict',
+            withCredentials: true,
             maxAge: 24 * 60 * 60 * 1000 // 24h
         });
 
@@ -38,5 +39,14 @@ const login = async (req, res) => {
         res.status(500).json({ message: 'Erreur lors de la connexion' });
     }
 }
+const logout = (req, res) => {
+    try {
+        res.clearCookie("jwtToken");
+        res.status(200).json({message: 'Déconnexion réussie'});
+    } catch (error) {
+        console.error("Erreur lors de la déconnexion:", error);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+}
 
-module.exports = { register, login };
+module.exports = { register, login, logout };

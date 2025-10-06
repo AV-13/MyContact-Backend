@@ -3,8 +3,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const createUser = async (userData) =>  {
-    const contact = await User.findOne({ email: userData.email });
-    if (contact) {
+    const existingUser = await User.findOne({ email: userData.email });
+    if (existingUser) {
         return { error: "Un utilisateur avec cet email existe déjà" };
     }
     const hashedPassword = await bcrypt.hash(userData.password, 10);

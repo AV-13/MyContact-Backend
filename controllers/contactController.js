@@ -45,9 +45,15 @@ const getContactById = async (req, res) => {
 const createContact = async (req, res) => {
     try {
 
-        const { nom, prenom, telephone, email, address } = req.body;
-        const contactData= { nom, prenom, telephone, email, address  };
-        await contactService.createContact(contactData, req.user.userId);
+        const { nom, prenom, telephone, email, adresse } = req.body;
+        const contactData= { nom, prenom, telephone, email, adresse  };
+        const creating = await contactService.createContact(contactData, req.user.userId);
+        if(creating.error) {
+            res.status(400).json({
+                message: creating.error
+            })
+            return;
+        }
 
         res.status(201).json({
             success: true,
@@ -64,13 +70,13 @@ const createContact = async (req, res) => {
 
 const updateContact = async (req, res) => {
     try {
-
-        const { _id, nom, prenom, telephone, email, address } = req.body;
-        const contactData= { nom, prenom, telephone, email, address  };
-        const contactId = _id["$oid"];
-        console.log("contactId : ", contactId);
+        console.log("req.body : ", req.body);
+        const { _id, nom, prenom, telephone, email, adresse } = req.body;
+        const contactData= { nom, prenom, telephone, email, adresse  };
+        // const contactId = _id["$oid"];
+        console.log("contactId : ", _id);
         // TODO add a verification that the user that update the contact is the owner of the contact with userId and UserContact model ?
-        await contactService.updateContact(contactData, contactId);
+        await contactService.updateContact(contactData, _id);
 
         res.status(201).json({
             success: true,

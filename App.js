@@ -12,12 +12,12 @@ const utilRoutes = require('./routes/utilsRoutes');
 
 const app = express();
 
-// app.use(cors({
-//     origin: '*',
-//     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-//     allowedHeaders: ['Content-Type', 'Authorization'],
-//     credentials: true
-// }));
+app.use(cors({
+    origin: 'http://localhost:3000, https://mycontact-frontend-rk68.onrender.com',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -30,7 +30,6 @@ app.use('/doc', swaggerUi.serve, swaggerUi.setup(specs));
 app.listen(PORT, async () => {
     console.log(`Serveur démarré sur le port ${PORT}`);
     console.log(`Documentation Swagger disponible sur http://localhost:${PORT}/doc`);
-
     try {
         await connectDB();
         console.log('Connexion à la base de données réussie');

@@ -7,7 +7,9 @@ const { securityRoute } = require("../controllers/utilController");
 router.get("/", (req, res) => {
     res.status(200).json({ message: "Bienvenue sur l'API de MyContact" });
 })
-
+router.get("/whoami", requireAuth, (req, res) => {
+    res.status(200).json({ message: "Vous êtes authentifié", user: req.user });
+})
 
 router.get("/security", requireAuth, securityRoute);
 

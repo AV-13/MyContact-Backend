@@ -4,6 +4,7 @@ const User = require("../model/User");
 
 const getUserContacts = async (userId) => {
     try {
+        console.log("userId dans contactService.getUserContacts: ", userId);
         const userContacts = await UserContact.find({ userId })
             .populate('contactId')
             .sort({ createdAt: -1 });
@@ -31,16 +32,30 @@ const getContactById = async (contactId, userId) => {
 }
 const createContact = async (contactData, userId) => {
     try {
+        let savedContact;
+        const existingContact = await User.findOne({ telephone: contactData.telephone });
+
+        if (existingContact) {
+            const id = existingContact._id;
+            const existingContactForUser = await UserContact.findOne({userId: userId, contactId: id})
+
+            if (existingContactForUser) {
+                return { error: "Ce contact existe déjà dans votre répertoire." };
+            }
+        }
+        else {
         const contact = new Contact(contactData);
-        const savedContact = await contact.save();
+        savedContact = await contact.save();
+        }
+        const id = existingContact ? existingContact._id : savedContact._id;
 
         const userContact = new UserContact({
             userId: userId,
-            contactId: savedContact._id
+            contactId: id
         });
         await userContact.save();
 
-        return savedContact;
+       return existingContact ? existingContact : savedContact;
     } catch (error) {
         console.error("contactService.createContact: Erreur lors de la création du contact:", error);
         throw error;
@@ -48,6 +63,7 @@ const createContact = async (contactData, userId) => {
 }
 const updateContact = async (contactData, contactId) => {
     try {
+        console.log("contactService.updateContact: Mise à jour du contact avec ID:", contactId, "Données:", contactData);
         return Contact.updateOne({ _id: contactId }, contactData);
     } catch (error) {
         console.error("contactService.createContact: Erreur lors de la création du contact:", error);
