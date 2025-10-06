@@ -13,7 +13,10 @@ const utilRoutes = require('./routes/utilsRoutes');
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3000, https://mycontact-frontend-rk68.onrender.com',
+    origin: [
+        'http://localhost:3000, ',
+        'https://mycontact-frontend-rk68.onrender.com',
+        ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
