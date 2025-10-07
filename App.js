@@ -14,7 +14,7 @@ const app = express();
 
 app.use(cors({
     origin: [
-        'http://localhost:3000, ',
+        'http://localhost:3000',
         'https://mycontact-frontend-rk68.onrender.com',
         ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
